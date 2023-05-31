@@ -26,7 +26,11 @@ class ClienteController extends Controller
         $detallesVentas = $cliente->ventas()->with('detallesVenta.ventas.clientes', 'detallesVenta.productos')->get();
 
 
+
         return ClientesDetalles_ventasResource::collection($detallesVentas);
+
+      
+
     }
 
     /**

@@ -14,22 +14,31 @@ class ClientesDetalles_ventasResource extends JsonResource
      */
  public function toArray($request)
     {
-/*         return [
-            'producto' => [
-                'nombre' => $this->detalles_venta->productos->nombre,
-                'precio' => $this->detalles_venta->productos->precio
-            ],
-            'cliente' => [
-                'nombre' => $this->detalles_venta->ventas->clientes->nombre,
-                'email' => $this->detalles_venta->ventas->clientes->email,
-                'telefono' => $this->detalles_venta->ventas->clientes->telefono
-            ],
-            'cantidad' => $this->detalles_venta->cantidad,
-            'total' => $this->detalles_venta->cantidad * $this->detalles_venta[0]->productos->precio
 
-        ]; */
+        $datos = parent::toArray($request);
+        $productos = collect($datos["detalles_venta"])->map(function ($detalleVenta) {
+            return [
+                'venta' => [
+                    'fecha' => $detalleVenta['ventas']['fecha'],
+                    'nombre_cliente' => $detalleVenta['ventas']['clientes']['nombre'],
+                    'email_cliente' => $detalleVenta['ventas']['clientes']['email'],
+                    'telefono_cliente' => $detalleVenta['ventas']['clientes']['telefono']
 
-        return parent::toArray($request);
+                ],
+                'producto' => [
+                    'nombre_producto' => $detalleVenta['productos']['nombre'],
+                    'precio' => $detalleVenta['productos']['precio']
+                    
+                ],
+                'cantidad' => $detalleVenta["cantidad"],
+                'total' => $detalleVenta["cantidad"] * $detalleVenta['productos']['precio']
+
+
+            ];
+        });
+        
+        return $productos;
+        
     }
 
 
